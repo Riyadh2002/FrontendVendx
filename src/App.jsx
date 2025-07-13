@@ -6,6 +6,11 @@ import { createContext, useState } from 'react'
 import ProductPage from './Productpage'
 import Payment from './Payment'
 import Offlinepayment from './Offlinepayment'
+import PaymentSUccess from './PaymentSUccess'
+import ProductDispand from './ProductDispand'
+import InsufficientStock from './InsufficientStock'
+import AuthorCodeGenerator from './AuthorCodeGenerator'
+import Newcode from './Newcode'
 
 
 export const context = createContext([{}, () => {}]);
@@ -40,6 +45,26 @@ function App() {
     {
       path: "/offlinePayment",
       element: <Offlinepayment />,
+    },
+    {
+      path: "/mypayment/success/:tranId",
+      element: <PaymentSUccess />,
+    },
+    {
+      path: "/ProductDispand",
+      element: <ProductDispand />,
+    },
+    {
+      path: "/insufficientProduct",
+      element: <InsufficientStock />,
+    },
+    {
+      path: "/codeGenerator",
+      element: <AuthorCodeGenerator />,
+    },
+    {
+      path: "/tokenCheckPage/:newcode",
+      element: <Newcode/>,
     },
   ]);
 

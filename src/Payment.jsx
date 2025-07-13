@@ -12,9 +12,38 @@ const Payment = () => {
     return <p>Error: No data received!</p>; // Fallback UI for missing data
   }
 
+  const onlineClick = async (id, price, quantity, title) => {
+    //basar wifi 192.168.0.115
+    //iphone 172.20.10.5
+    fetch("http://172.20.10.5:5000/Order",{
+      method:"POST",
+      headers:{
+        "content-type":"application/json",
+      },
+      body: JSON.stringify({
+        id:id,
+        price:price,
+        quantity:quantity,
+        title:title,
+      })
+    })
+    .then((res)=>res.json())
+    .then((result) => {
+      // Check if URL exists and redirect
+      if (result.URL) {
+        console.log(result.URL);  // Log the URL for debugging
+        window.location.href = result.URL;  // Redirect to the payment gateway
+      } else {
+        console.error("No URL found in response");
+      }
+    })
+  };
+  
   const handleClick = (id, price, quantity) => {
     setIsOfflineClicked(true);
-    fetch('http://localhost:5000/payment', {
+    //basar wifi 192.168.0.115
+    //iphone 172.20.10.5
+    fetch('http://172.20.10.5:5000/payment', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -130,135 +159,196 @@ const Payment = () => {
       ) : (
         // Initial UI when the page is first loaded, with payment options
         <div className="container" style={{ height: "100vh", padding: "0" }}>
-          <div
+  {/* Combined Header and Content Section */}
+  <div
+    style={{
+      width: "100%",
+      maxWidth: "550px",
+      margin: "0 auto",
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    }}
+  >
+    {/* Top Header Section */}
+    <div
+      style={{
+        height: '15%',
+        display: 'flex',
+        backgroundColor: '#009bad',
+        color: 'white',
+        padding: '5px',
+        flexDirection: 'row',
+        width: '100%',
+        margin: '0 auto',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+      }}
+    >
+      <div
+        style={{ flex: '0 0 55%' }}
+        className="d-flex flex-column justify-content-center"
+      >
+        <h1
+          style={{
+            fontSize: '1.8rem',
+            marginLeft: '15px',
+            marginTop: '10px',
+            fontWeight: 'bold',
+            whiteSpace: 'nowrap',
+            fontFamily: "'Roboto', Arial, sans-serif", // Standard Font Family
+          }}
+        >
+          VEND-X
+        </h1>
+      </div>
+
+      <div
+        style={{
+          flex: '0 0 45%',
+          marginTop: '10px',
+          paddingRight: '15px',
+        }}
+        className="d-flex justify-content-end align-items-center"
+      >
+        <div
+          className="d-flex align-items-center"
+          style={{ textAlign: 'center', gap: '10px' }}
+        >
+          <span
             style={{
-              height: '15%',
-              display: 'flex',
-              backgroundColor: '#009bad',
+              fontSize: '1rem',
               color: 'white',
-              padding: '5px',
-              flexDirection: 'row',
-              width: '550px',
-              margin: '0 auto',
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+              whiteSpace: 'nowrap',
+              fontFamily: "'Roboto', Arial, sans-serif", // Standard Font Family
             }}
           >
-            <div style={{ flex: '0 0 55%' }} className="d-flex flex-column justify-content-center">
-              <h1 style={{ fontSize: '2.2rem', marginLeft: "30px", marginTop: "15px", fontWeight: 'bold' }}>
-                VEND-X
-              </h1>
-            </div>
-
-            <div style={{ flex: '0 0 30%', marginTop: "15px", paddingRight: "30px" }} className="d-flex justify-content-center align-items-center">
-              <div className="d-flex align-items-center" style={{ textAlign: 'center', marginRight: '30px' }}>
-                <span style={{ fontSize: '1.2rem', marginRight: '10px', color: 'white' }}>
-                  {new Date().toLocaleDateString()}
-                </span>
-                <div style={{ width: '2px', height: '20px', backgroundColor: 'white', margin: '0 10px' }} />
-                <span style={{ fontSize: '2rem', color: 'white', fontWeight: 'bold' }}>
-                  {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                </span>
-              </div>
-            </div>
-          </div>
-
+            {new Date().toLocaleDateString()}
+          </span>
           <div
-            className="container-fluid d-flex justify-content-center align-items-center"
+            style={{ width: '2px', height: '20px', backgroundColor: 'white' }}
+          />
+          <span
             style={{
-              height: "85%",
-              fontFamily: "Arial, sans-serif",
+              fontSize: '1.5rem',
+              color: 'white',
+              fontWeight: 'bold',
+              whiteSpace: 'nowrap',
+              fontFamily: "'Roboto', Arial, sans-serif", // Standard Font Family
             }}
           >
-            <div
-              style={{
-                width: "550px",
-                height: "100%",
-                backgroundColor: "#009bad",
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                padding: "25px",
-                paddingTop: "0px",
-              }}
-            >
-              <div
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  backgroundColor: "white",
-                  borderRadius: '15px',
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  padding: "20px",
-                }}
-              >
-                <h3
-                  style={{
-                    color: "#009bad",
-                    fontWeight: "bold",
-                    marginBottom: "30px",
-                    fontSize: "24px",
-                    textAlign: "center",
-                  }}
-                >
-                  Choose your payment type
-                </h3>
-
-                <button
-                  style={{
-                    width: "100%",
-                    padding: "15px",
-                    marginBottom: "20px",
-                    border: "2px solid #009bad",
-                    backgroundColor: "transparent",
-                    color: "#009bad",
-                    fontSize: "18px",
-                    fontWeight: "bold",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = "#009bad";
-                    e.target.style.color = "white";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = "transparent";
-                    e.target.style.color = "#009bad";
-                  }}
-                >
-                  Online Payment
-                </button>
-
-                <button
-                  onClick={() => handleClick(id, price, quantity)}
-                  style={{
-                    width: "100%",
-                    padding: "15px",
-                    border: "2px solid #009bad",
-                    backgroundColor: "transparent",
-                    color: "#009bad",
-                    fontSize: "18px",
-                    fontWeight: "bold",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = "#009bad";
-                    e.target.style.color = "white";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = "transparent";
-                    e.target.style.color = "#009bad";
-                  }}
-                >
-                  Offline Payment
-                </button>
-              </div>
-            </div>
-          </div>
+            {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          </span>
         </div>
+      </div>
+    </div>
+
+    {/* Main Content Section (Payment Options) */}
+    <div
+      className="container-fluid d-flex justify-content-center align-items-center"
+      style={{
+        height: "85%",
+        fontFamily: "'Roboto', Arial, sans-serif", // Standard Font Family
+        backgroundColor: "#f7f7f7", // Light gray background for outer container
+        padding: "30px",
+        boxSizing: "border-box",
+        backgroundColor: "white", // White background for the content area
+      }}
+    >
+      <div
+        style={{
+          width: "100%",
+          maxWidth: "550px",
+          padding: "30px",
+          borderRadius: "10px",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+          textAlign: "center",
+        }}
+      >
+        <h3
+          style={{
+            color: "#007bff",
+            fontWeight: "bold",
+            marginBottom: "20px",
+            fontSize: "24px",
+            fontFamily: "'Roboto', Arial, sans-serif", // Standard Font Family
+          }}
+        >
+          Choose Your Payment Method
+        </h3>
+
+        <p
+          style={{
+            color: "#333",
+            fontSize: "16px",
+            marginBottom: "30px",
+            fontWeight: "400",
+            fontFamily: "'Roboto', Arial, sans-serif", // Standard Font Family
+          }}
+        >
+          Please select one of the payment options below to proceed with your purchase.
+        </p>
+
+        {/* Online Payment Button */}
+        <button
+          onClick={() => onlineClick(id, price, quantity, title)}
+          style={{
+            width: "100%",
+            padding: "15px",
+            marginBottom: "15px",
+            border: "2px solid #007bff",
+            backgroundColor: "#007bff",
+            color: "white",
+            fontSize: "18px",
+            fontWeight: "600",
+            borderRadius: "8px",
+            cursor: "pointer",
+            transition: "all 0.3s ease",
+            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+            fontFamily: "'Roboto', Arial, sans-serif", 
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = "#0056b3"; // Darken on hover
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = "#007bff"; // Reset color after hover
+          }}
+        >
+          Online Payment
+        </button>
+
+        {/* Offline Payment Button */}
+        <button
+          onClick={() => handleClick(id, price, quantity)}
+          style={{
+            width: "100%",
+            padding: "15px",
+            border: "2px solid #28a745",
+            backgroundColor: "#28a745",
+            color: "white",
+            fontSize: "18px",
+            fontWeight: "600",
+            borderRadius: "8px",
+            cursor: "pointer",
+            transition: "all 0.3s ease",
+            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+            fontFamily: "'Roboto', Arial, sans-serif", // Standard Font Family
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = "#218838"; // Darken on hover
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = "#28a745"; // Reset color after hover
+          }}
+        >
+          Offline Payment
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
       )}
     </>
   );

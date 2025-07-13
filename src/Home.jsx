@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { context } from './App';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import catbary from "../src/img/dairyMilk.jpg";
 import Star from "../src/img/5star.jpg";
 import Staradd from "../src/img/5starAdd.jpg";
@@ -11,11 +11,18 @@ import chanacur from "../src/img/chanachur.jpg";
 import pan from "../src/img/pan.jpg";
 import Kitkat from "../src/img/KitKat.jpg";
 
+
 export default function Home() {
   const [purchase, setPurchase] = useContext(context);
 
+  const navigate= useNavigate();
+  
+
   const clicked = (data) => {
+    console.log("Clicked card data in Home page:", data); // Debug the card data
     setPurchase(data); // Update context with the selected product
+    navigate("/product");
+
   };
 
   // Carousel state and timing
@@ -43,14 +50,14 @@ export default function Home() {
             </div>
 
             {/* Right side: Date and Time */}
-            <div style={{ flex: '0 0 30%', marginTop: "15px", paddingRight: "30px" }} className="d-flex justify-content-center align-items-center">
+            <div style={{ flex: '0 0 30%', marginTop: "15px", paddingRight: "30px",  }} className="d-flex justify-content-center align-items-center">
               {/* Flex container for date and time */}
               <div className="d-flex align-items-center" style={{ whiteSpace: 'nowrap', textAlign: 'center', marginRight: '30px' }}>
                 <span style={{ fontSize: '1.2rem', marginRight: '10px', color: 'white', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
                   {new Date().toLocaleDateString()}
                 </span>
-                <div style={{ width: '2px', height: '20px', backgroundColor: 'white', margin: '0 10px' }} />
-                <span style={{ fontSize: '2rem', color: 'white', fontWeight: 'bold', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <div style={{ width: '2px', height: '20px', backgroundColor: 'white', margin: '0 10px', }} />
+                <span style={{ fontSize: '2rem', color: 'white', fontWeight: 'bold', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
                   {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </span>
               </div>
@@ -77,39 +84,55 @@ export default function Home() {
               <div style={{ height: '55%', backgroundColor: '#ffffff', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <div className="row g-2 h-100" style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
                   {cards.map((card) => (
-                    <div key={card.id} className="col-4 d-flex justify-content-center">
-                      <Link to="/product">
-                        <div
-                          className="card"
-                          onClick={() => clicked(card)}
+                    <div className="col-4 d-flex justify-content-center">
+                    
+                      <div
+                        className="card"
+                        onClick={() => clicked(card)}
+                        style={{
+                          width: '100px',
+                          height: '120px',
+                          borderRadius: '10px',
+                          overflow: 'hidden',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          backgroundColor: '#ffffff',
+                          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                          cursor: 'pointer',
+                          transition: 'transform 0.3s ease, box-shadow 0.3s ease, z-index 0.3s ease', // Smooth transition
+                          zIndex: 1, // Default position of card
+                        }}
+                        onMouseEnter={(e) => {
+                          e.target.style.transform = 'scale(1.05)'; // Slightly scale the card for the Z-axis movement
+                          e.target.style.zIndex = 10; // Bring the card to the front on hover
+                          e.target.style.boxShadow = '0 12px 24px rgba(0, 0, 0, 0.2)'; // Enhanced shadow on hover
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.transform = 'scale(1)'; // Reset scaling
+                          e.target.style.zIndex = 1; // Reset z-index to normal
+                          e.target.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)'; // Reset shadow
+                        }}
+                      >
+                        <img
+                          src={card.imgSrc}
+                          className="card-img-top"
+                          alt={`Card ${card.id}`}
                           style={{
-                            width: '100px',
-                            height: '120px',
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
                             borderRadius: '10px',
-                            overflow: 'hidden',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            backgroundColor: '#ffffff',
-                            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                            cursor: 'pointer',
+                            padding: "6px",
                           }}
-                        >
-                          <img
-                            src={card.imgSrc}
-                            className="card-img-top"
-                            alt={`Card ${card.id}`}
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              objectFit: 'cover',
-                              borderRadius: '10px',
-                              padding:"6px",
-                            }}
-                          />
-                        </div>
-                      </Link>
-                    </div>
+                        />
+                      </div>
+                    
+                  </div>
+                  
+                  
+                  
+                  
                   ))}
                 </div>
               </div>
@@ -122,8 +145,9 @@ export default function Home() {
 }
 
 const cards = [
-  { id: 1, title: "Cat Bary", text: "This is card 1 content.", price: 10, imgSrc: catbary },
-  { id: 2, title: "Star", text: "This is card 2 content.", price: 10, imgSrc: Star },
+  { id: 1, title: "Star", text: "This is card 2 content.", price: 10, imgSrc: Star },
+  { id: 2, title: "Dairy Mikl", text: "This is card 1 content.", price: 10, imgSrc: catbary },
+  
   { id: 3, title: "KitKat", text: "Have a break, have a KitKat", price: 20, imgSrc: Kitkat },
   { id: 4, title: "Pran Patata", text: "Crunchy patata.", price: 20, imgSrc: patata },
   { id: 5, title: "BBQ Chanacur", text: "Mix chanacur.", price: 10, imgSrc: chanacur },

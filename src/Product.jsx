@@ -51,8 +51,13 @@ export default function Product() {
   
 
   // Check if p and necessary properties are available
+  // ekane 2 bar click hoto.. 
   if (!purchase.name || !purchase.price || !purchase.imgSrc) {
-    console.log(purchase)
+    //ei if diye eita privent kora hoyeche
+    if (!window.hasLoggedPurchase) {
+      console.log("in product page: ", purchase);
+      window.hasLoggedPurchase = true;
+    }
   }
 
   const [quantity, setQuantity] = useState(1);
